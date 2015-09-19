@@ -4,7 +4,7 @@ from tweepy.streaming import StreamListener
 import json
 import psycopg2
 import indicoio
-import politicalParty
+from politicalParty import *
 
 #!/usr/bin/python2.4
 #
@@ -18,6 +18,8 @@ liberal = politicalParty("Liberal", "Justin Trudeau")
 ndp.keywords = ["@ndp_hq", "@thomasmulcair", "tom mulcair", "thomas mulcair"]
 conservative.keywords = ["@pmharper", "@cpc_hq", "stephen harper"]
 liberal.keywords = ["@justintrudeau", "@liberal_party", "justin trudeau"]
+
+keywords = ndp.keywords + conservative.keywords + liberal.keywords
 
 try:
     conn = psycopg2.connect("dbname='psephology' user='twitter' host='localhost' password='twitter'")
@@ -70,4 +72,4 @@ auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
 twitterStream = Stream(auth, listener())
-twitterStream.filter(track=['ndp'])
+twitterStream.filter(track=keywords)
