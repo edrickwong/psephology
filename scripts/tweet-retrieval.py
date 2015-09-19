@@ -15,6 +15,10 @@ ndp = politicalParty("New Democratic Party", "Tom Mulcair")
 conservative = politicalParty("Conservatives", "Stephen Harper")
 liberal = politicalParty("Liberal", "Justin Trudeau")
 
+ndp.keywords = ["@ndp_hq", "@thomasmulcair", "tom mulcair", "thomas mulcair"]
+conservative.keywords = ["@pmharper", "@cpc_hq", "stephen harper"]
+liberal.keywords = ["@justintrudeau", "@liberal_party", "justin trudeau"]
+
 try:
     conn = psycopg2.connect("dbname='psephology' user='twitter' host='localhost' password='twitter'")
 except:
