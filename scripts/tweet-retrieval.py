@@ -4,11 +4,16 @@ from tweepy.streaming import StreamListener
 import json
 import psycopg2
 import indicoio
+import politicalParty
 
 #!/usr/bin/python2.4
 #
 # Small script to show PostgreSQL and Pyscopg together
 #
+
+ndp = politicalParty("New Democratic Party", "Tom Mulcair")
+conservative = politicalParty("Conservatives", "Stephen Harper")
+liberal = politicalParty("Liberal", "Justin Trudeau")
 
 try:
     conn = psycopg2.connect("dbname='psephology' user='twitter' host='localhost' password='twitter'")
