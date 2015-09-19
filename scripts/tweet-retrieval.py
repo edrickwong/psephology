@@ -4,6 +4,7 @@ from tweepy.streaming import StreamListener
 import json
 import psycopg2
 import indicoio
+import datetime
 from politicalParty import *
 
 #!/usr/bin/python2.4
@@ -22,7 +23,7 @@ lpc.keywords = ["@liberal_party", "@justintrudeau", "#lpc", "justin trudeau"]
 keywords = ndp.keywords + cpc.keywords + lpc.keywords
 
 try:
-    conn = psycopg2.connect("dbname='psephology' user='twitter' host='localhost' password='twitter'")
+    conn = psycopg2.connect("dbname='psephologyRails' user='twitter' host='localhost' password='twitter'")
 except:
     print "I am unable to connect to the database"
 
@@ -50,6 +51,8 @@ class listener(StreamListener):
         
         username = all_data["user"]["screen_name"] 
 
+        now = datetime.datetime.now()
+
         print("TWEET: " + tweet)
 
         print("USERNAME: " + username)
@@ -59,16 +62,16 @@ class listener(StreamListener):
         print("TWEETED_AT: " + tweeted_at)
 
         if any(keyword in tweet for keyword in ndp.keywords):
-            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party) VALUES (%s,%s,%s,%s,%s)",
-            (tweet, username, sentiment, tweeted_at, "ndp"))
+            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party, created_at, updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (tweet, username, sentiment, tweeted_at, "ndp", now, now))
 
         if any(keyword in tweet for keyword in cpc.keywords):
-            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party) VALUES (%s,%s,%s,%s,%s)",
-            (tweet, username, sentiment, tweeted_at, "cpc"))
+            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party, created_at, updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (tweet, username, sentiment, tweeted_at, "cpc", now, now))
 
         if any(keyword in tweet for keyword in lpc.keywords):
-            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party) VALUES (%s,%s,%s,%s,%s)",
-            (tweet, username, sentiment, tweeted_at, "lpc"))
+            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party, created_at, updated_at) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (tweet, username, sentiment, tweeted_at, "lpc", now, now))
 
         conn.commit()
 
