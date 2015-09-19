@@ -15,9 +15,9 @@ ndp = politicalParty("New Democratic Party", "Thomas Mulcair")
 cpc = politicalParty("Conservative Party of Canada", "Stephen Harper")
 lpc = politicalParty("Liberal Party of Canada", "Justin Trudeau")
 
-ndp.keywords = ["@ndp_hq", "@thomasmulcair", "tom mulcair", "thomas mulcair"]
-cpc.keywords = ["@pmharper", "@cpc_hq", "stephen harper"]
-lpc.keywords = ["@justintrudeau", "@liberal_party", "justin trudeau"]
+ndp.keywords = ["@ndp_hq", "@thomasmulcair", "#ndp", "tom mulcair", "thomas mulcair"]
+cpc.keywords = ["@cpc_hq", "@pmharper", "#cpc", "stephen harper"]
+lpc.keywords = ["@liberal_party", "@justintrudeau", "#lpc", "justin trudeau"]
 
 keywords = ndp.keywords + cpc.keywords + lpc.keywords
 
