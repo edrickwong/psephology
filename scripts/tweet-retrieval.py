@@ -11,15 +11,15 @@ from politicalParty import *
 # Small script to show PostgreSQL and Pyscopg together
 #
 
-ndp = politicalParty("New Democratic Party", "Tom Mulcair")
-conservative = politicalParty("Conservatives", "Stephen Harper")
-liberal = politicalParty("Liberal", "Justin Trudeau")
+ndp = politicalParty("New Democratic Party", "Thomas Mulcair")
+cpc = politicalParty("Conservative Party of Canada", "Stephen Harper")
+lpc = politicalParty("Liberal Party of Canada", "Justin Trudeau")
 
 ndp.keywords = ["@ndp_hq", "@thomasmulcair", "tom mulcair", "thomas mulcair"]
-conservative.keywords = ["@pmharper", "@cpc_hq", "stephen harper"]
-liberal.keywords = ["@justintrudeau", "@liberal_party", "justin trudeau"]
+cpc.keywords = ["@pmharper", "@cpc_hq", "stephen harper"]
+lpc.keywords = ["@justintrudeau", "@liberal_party", "justin trudeau"]
 
-keywords = ndp.keywords + conservative.keywords + liberal.keywords
+keywords = ndp.keywords + cpc.keywords + lpc.keywords
 
 try:
     conn = psycopg2.connect("dbname='psephology' user='twitter' host='localhost' password='twitter'")
@@ -42,7 +42,7 @@ class listener(StreamListener):
     def on_data(self, data):
         all_data = json.loads(data)
 
-        tweet = all_data["text"]
+        tweet = all_data["text"].lower()
 
         sentiment = indicoio.sentiment(tweet)
 
@@ -58,8 +58,17 @@ class listener(StreamListener):
 
         print("TWEETED_AT: " + tweeted_at)
 
-        cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at) VALUES (%s,%s,%s,%s)",
-            (tweet, username, sentiment, tweeted_at))
+        if any(keyword in tweet for keyword in ndp.keywords):
+            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party) VALUES (%s,%s,%s,%s,%s)",
+            (tweet, username, sentiment, tweeted_at, "ndp"))
+
+        if any(keyword in tweet for keyword in cpc.keywords):
+            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party) VALUES (%s,%s,%s,%s,%s)",
+            (tweet, username, sentiment, tweeted_at, "cpc"))
+
+        if any(keyword in tweet for keyword in lpc.keywords):
+            cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at, party) VALUES (%s,%s,%s,%s,%s)",
+            (tweet, username, sentiment, tweeted_at, "lpc"))
 
         conn.commit()
 
