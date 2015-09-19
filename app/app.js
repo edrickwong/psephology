@@ -61,7 +61,29 @@ module.exports = app;*/
 
 
 var express = require('express');
+var pg = require('pg');
+var conString = "postgres://twitter:twitter@localhost/psephology";
+
 var app = express();
+
+//stuff to connect to db
+
+pg.connect(conString, function(err, client, done) {
+
+  if (err) {
+    return console.error('error fetching client from pool', err);
+  }
+  client.query('SELECT $1::int AS number', ['1'], function(err, result) {
+    done();
+    if (err) {
+      return console.error('error running query', err);
+    }
+    console.log(result.rows[0].number);
+  });
+
+});
+
+//stuff to start websever
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
