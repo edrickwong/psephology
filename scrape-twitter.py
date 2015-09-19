@@ -18,30 +18,37 @@ except:
 cur = conn.cursor()
 
 # consumer key, consumer secret, access token, access secret.
-ckey=""
-csecret=""
-atoken=""
-asecret=""
+ckey="WE2891N5RET0JJw1CYOOKZyHY"
+csecret="0B6RwoWUfoKuyA8sn1Z3vkLdNu1b58Sh2a3O9skpqRc2TnD90c"
+atoken="2254230432-pajLITCj09mYcK7goVIeZobpfGrxcbPc0jqUXy5"
+asecret="QMwW4NS4TQqb5SXov7Rby8wbkX559isDgzxFgt9LzUeg0"
 
 # Indico setup
-indicoio.config.api_key = ''
+indicoio.config.api_key = '6f6cfb806632d4b45101a5b7db77fc29'
 
 class listener(StreamListener):
 
     def on_data(self, data):
         all_data = json.loads(data)
-        
+
         tweet = all_data["text"]
+
+        sentiment = indicoio.sentiment(tweet)
+
+        tweeted_at = all_data["created_at"]
         
         username = all_data["user"]["screen_name"] 
 
-        print("TWEET: ")
-        print(tweet)
-        print("\nSENTIMENT: ")
-        print(indicoio.sentiment(tweet))
+        print("TWEET: " + tweet)
 
-        cur.execute("INSERT INTO tweets (tweet, username, sentiment) VALUES (%s,%s,%s)",
-            (tweet, username, indicoio.sentiment(tweet)))
+        print("USERNAME: " + username)
+
+        print("SENTIMENT: " + str(sentiment))
+
+        print("TWEETED_AT: " + tweeted_at)
+
+        cur.execute("INSERT INTO tweets (tweet, username, sentiment, tweeted_at) VALUES (%s,%s,%s,%s)",
+            (tweet, username, sentiment, tweeted_at))
 
         conn.commit()
 
