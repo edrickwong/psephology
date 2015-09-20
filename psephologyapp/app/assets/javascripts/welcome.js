@@ -7,11 +7,30 @@ $( document ).ready(function() {
 	    gon.ndpSentiment,
 	  ]
 	}, {
-	  fullWidth: true,
+	  height: 350,
 	  chartPadding: {
 	    right: 60
 	  }
-	});
+	},
+
+	[
+	  ['screen and (min-width: 641px) and (max-width: 1024px)', {
+	    showPoint: false,
+	    axisX: {
+	      labelInterpolationFnc: function(value) {
+	        return 'Week ' + value;
+	      }
+	    }
+	  }],
+	  ['screen and (max-width: 640px)', {
+	    showLine: false,
+	    axisX: {
+	      labelInterpolationFnc: function(value) {
+	        return 'W' + value;
+	      }
+	    }
+	  }]
+	]);
 
 	var seq = 0,
 	delays = 80,
