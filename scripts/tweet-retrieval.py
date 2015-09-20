@@ -23,6 +23,16 @@ lpc.keywords = ["@liberal_party", "@justintrudeau", "#lpc", "justin trudeau"]
 
 keywords = ndp.keywords + cpc.keywords + lpc.keywords
 
+searchQuery = ""
+
+for keyword in keywords:
+    if searchQuery == "":
+        searchQuery = keyword
+    else: 
+        searchQuery = keyword + " OR " + searchQuery
+
+print searchQuery
+
 try:
     conn = psycopg2.connect("dbname='psephologyRails' user='twitter' host='localhost' password='twitter'")
 except:
@@ -93,9 +103,9 @@ date1 = datetime.date(2015, 9, 13)
 date2 = datetime.date(2015, 9, 20)
 day = datetime.timedelta(days=1)
 
-searchQuery = '#ndp'  # this is what we're searching for
-maxTweets = 10 # Some arbitrary large number
-tweetsPerQry = 2  # this is the max the API permits
+searchQuery = '#ndp OR #lpc'  # this is what we're searching for
+maxTweets = 1000 # Some arbitrary large number
+tweetsPerQry = 100  # this is the max the API permits
 
 while date1 <= date2:
     # If results from a specific ID onwards are reqd, set since_id to that ID.
