@@ -9,3 +9,7 @@
 .ct-chart .ct-series.ct-series-c .ct-line, .ct-chart .ct-series.ct-series-c .ct-point {
 	stroke: orange;
 }
+
+.row h4 {
+	color: black;
+}
