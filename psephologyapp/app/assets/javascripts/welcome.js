@@ -9,7 +9,7 @@ $( document ).ready(function() {
 	}, {
 	  fullWidth: true,
 	  chartPadding: {
-	    right: 40
+	    right: 60
 	  }
 	});
 });
