@@ -10,6 +10,14 @@
 	stroke: orange;
 }
 
-.row h4 {
-	color: black;
+#chartTitle {
+	color: rgba(0,0,0,.4);
+}
+
+.ct-chart .ct-label.ct-vertical {
+	font-size: 12px;
+}
+
+.ct-chart .ct-label, .ct-chart .ct-label.ct-horizontal {
+	font-size: 12px;
 }
