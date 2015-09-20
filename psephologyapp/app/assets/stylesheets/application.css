@@ -12,6 +12,10 @@
  *
  *= require chartist.min
  *= require chartistStyle
+ *= require bootstrap.min
+ *= require font-awesome.min
+ *= require hover
+ *= require style
  *= require_tree .
  *= require_self
  */

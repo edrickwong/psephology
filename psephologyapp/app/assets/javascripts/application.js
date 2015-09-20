@@ -14,4 +14,10 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require chartist
+//= require bootstrap.min
+//= require html5shiv
+//= require jquery-1.10.2.min
+//= require jquery-migrate-1.2.1.min
+//= require jquery.easing.1.3
+//= require script
 //= require_tree .
