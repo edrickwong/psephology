@@ -21,3 +21,15 @@
 .ct-chart .ct-label, .ct-chart .ct-label.ct-horizontal {
 	font-size: 12px;
 }
+
+.ndp {
+	color: orange;
+}
+
+.lpc {
+	color: red;
+}
+
+.cpc {
+	color: blue;
+}
