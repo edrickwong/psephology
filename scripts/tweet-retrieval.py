@@ -1,3 +1,4 @@
+import tweepy
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
@@ -83,5 +84,92 @@ class listener(StreamListener):
 auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
-twitterStream = Stream(auth, listener())
-twitterStream.filter(track=keywords)
+# twitterStream = Stream(auth, listener())
+# twitterStream.filter(track=keywords)
+
+api = tweepy.API(auth)
+
+date1 = datetime.date(2015, 9, 13)
+date2 = datetime.date(2015, 9, 20)
+day = datetime.timedelta(days=1)
+
+searchQuery = '#ndp'  # this is what we're searching for
+maxTweets = 10 # Some arbitrary large number
+tweetsPerQry = 2  # this is the max the API permits
+
+while date1 <= date2:
+    # If results from a specific ID onwards are reqd, set since_id to that ID.
+    # else default to no lower limit, go as far back as API allows
+    sinceId = None
+     
+    # If results only below a specific ID are, set max_id to that ID.
+    # else default to no upper limit, start from the most recent tweet matching the search query.
+    max_id = -1L
+
+    tweetCount = 0
+
+    nextDate = date1 + day
+
+    while tweetCount < maxTweets:
+        try:
+            if (max_id <= 0):
+                if (not sinceId):
+                    new_tweets = api.search(q=searchQuery, count=tweetsPerQry, since=date1, until=nextDate)
+                else:
+                    new_tweets = api.search(q=searchQuery, count=tweetsPerQry,
+                                            since_id=sinceId, since=date1, until=nextDate)
+            else:
+                if (not sinceId):
+                    new_tweets = api.search(q=searchQuery, count=tweetsPerQry,
+                                            max_id=str(max_id - 1), since=date1, until=nextDate)
+                else:
+                    new_tweets = api.search(q=searchQuery, count=tweetsPerQry,
+                                            max_id=str(max_id - 1),
+                                            since_id=sinceId, since=date1, until=nextDate)
+            if not new_tweets:
+                print("No more tweets found")
+                break
+            for tweetData in new_tweets:
+
+                tweet = tweetData.text
+
+                sentiment = indicoio.sentiment(tweet)
+
+                tweeted_at = tweetData.created_at
+
+                now = datetime.datetime.now()
+
+                print("TWEET: " + tweet)
+
+                print("SENTIMENT: " + str(sentiment))
+
+                print("TWEETED_AT: " + str(tweeted_at))
+
+                if any(keyword in tweet for keyword in ndp.keywords):
+                    cur.execute("INSERT INTO tweets (tweet, sentiment, tweeted_at, party, created_at, updated_at) VALUES (%s,%s,%s,%s,%s,%s)",
+                    (tweet, sentiment, tweeted_at, "ndp", now, now))
+
+                if any(keyword in tweet for keyword in cpc.keywords):
+                    cur.execute("INSERT INTO tweets (tweet, sentiment, tweeted_at, party, created_at, updated_at) VALUES (%s,%s,%s,%s,%s,%s)",
+                    (tweet, sentiment, tweeted_at, "cpc", now, now))
+
+                if any(keyword in tweet for keyword in lpc.keywords):
+                    cur.execute("INSERT INTO tweets (tweet, sentiment, tweeted_at, party, created_at, updated_at) VALUES (%s,%s,%s,%s,%s,%s)",
+                    (tweet, sentiment, tweeted_at, "lpc", now, now))
+
+                conn.commit()
+
+            tweetCount += len(new_tweets)
+            print("Downloaded {0} tweets".format(tweetCount))
+            max_id = new_tweets[-1].id
+        except tweepy.TweepError as e:
+            # Just exit if any error
+            print("some error : " + str(e))
+            break
+
+
+    date1 = date1 + day
+
+    
+
+
