@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tweet: MyString
+  username: MyString
+  sentiment: 1.5
+  tweeted_at: 2015-09-19 18:58:21
+  party: MyString
+
+two:
+  tweet: MyString
+  username: MyString
+  sentiment: 1.5
+  tweeted_at: 2015-09-19 18:58:21
+  party: MyString
